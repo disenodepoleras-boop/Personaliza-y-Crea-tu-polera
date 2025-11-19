@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link
+          rel="stylesheet"
+          href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+        />
+        <link
+          rel="stylesheet"
+          href="style.css"
+        />
+      
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <title>Master Page con Navegacion Lateral</title>
+        <!-- Iclude Fabric.js in the page -->
+        <script src="fabric.min.js"></script>
+
+        <!-- Include DomToImage in the page -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.2/dist/browser/backgroundRemoval.js"></script>
+
+
+
+
+        <style>
+
+          /* === VERSIÓN PARA CELULARES Y TABLETS === */
+
+@media (max-width: 768px) {
+    .mosaic {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 480px) {
+    .mosaic {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Ajustar sidebar Apilado */
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-wrap: wrap;
+        box-shadow: none;
+    }
+
+    .sidebar ul li {
+        margin: 5px;
+        width: 90%;
+    }
+
+ /* Botones más grandes para celular */
+    .sidebar a, .in, .il, .botondedescarga {
+        font-size: 18px;
+        padding: 15px;
+    }
+
+.in, .il, #verFrontal, #verTrasera {
+    width: 45%;
+    font-size: 14px;
+    padding: 10px;
+}
+
+
+    /* Ajustar vista de polera */
+    #tshirt-div,
+    #tshirt-div-back {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    #tshirt-backgroundpicture,
+    #tshirt-backgroundpicture-back {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Centrar el canvas sobre la polera */
+    .drawing-area,
+.black-polera {
+    width: 70vw;
+    height: 110vw;
+}
+.canvas-container {
+    width: 70vw !important;
+    height: 110vw !important;
+}
+
+
+    /* Botones "Ver frontal / trasera" más separados */
+    #verFrontal, #verTrasera {
+        margin: 10px;
+        width: 40%;
+        font-size: 18px;
+    }
+
+    /* Footer fijo abajo siempre */
+    .footer {
+        font-size: 14px;
+        padding: 10px;
+        position: relative;
+    }
+
+    @media (max-width: 768px) {
+    .footer {
+        position: relative !important;
+        margin-top: 20px;
+    }
+}
+
+}
+
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body{
+                font-family: Arial, sans-serif;
+                background-color: #ffffff;
+            }
+            header{
+                background-color: #2c3e50;
+                color: white;
+                padding: 40px;
+                text-align: center;
+                background-image: url("header/pngwing.com\ \(16\).png");
+                background-size: cover;
+                background-position: left left;
+            }
+
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .container {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .sidebar{
+                width: 250px;
+                background-color: #ffffff;
+                color: #333;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            }
+
+            .sidebar div {
+                color: #333;
+                text-decoration: none;
+                padding: 15px;
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+                transition: background-color 0.3s;
+            }
+
+            .sidebar div:hover {
+                background-color: #f1f1f1;
+            }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar ul li {
+                border-bottom: 1px solid #eee;
+            }
+
+            .sidebar a {
+                display: flex;
+                align-items: center;
+                padding: 15px 20px;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+            .sidebar a:hover {
+                background-color: #f0f0f0;
+            }
+
+            .sidebar i {
+                margin-right: 15px;
+                width: 20px;
+                text-align: center;
+            }
+
+            .submenu {
+                display: none;
+                flex-direction: column;
+                background-color: #fdfbfb;
+            }
+
+            .submenu a {
+                padding-left: 50px;
+            }
+
+            .sidebar .toggle-submenu {
+                cursor: pointer;
+            }
+
+            .mosaic {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+                padding: 10px;
+            }
+
+            .mosaic img {
+                width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+
+            .main-content{
+                margin-left: 180px;
+                padding: 20px;
+                flex-grow: 1;
+            }
+
+            .main-content h2 {
+                margin-bottom: 20px;
+            }
+
+            .footer {
+                background-color: #0568cb;
+                background-image: url("poleras/pngwing.com.png");
+                background-size: cover;
+                color: white;
+                padding: 15px;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
+                background-position: center;
+                 left: 0;
+                 z-index: 999;
+            }
+
+            .drawing-area {
+               position: absolute;
+               top: 120px;
+               left: 160px;
+               width: 300px;
+               height: 500px;
+               pointer-events: auto;
+           }
+
+
+            .canvas-container {
+                width: 300px;
+                height: 500px;
+                position: relative;
+                user-select: none;
+            }
+
+            #tshirt-div {
+                width: 580px;
+                height: 548px;
+                position: relative;
+                background-color: white;
+            }
+
+            #canvas {
+                position: absolute;
+                width: 300px;
+                height: 500px;
+                left: 0px;
+                top: 0px;
+                user-select: none;
+                cursor: default;
+            }
+            .custom-file-upload {
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                background-color: rgb(245, 245, 7);
+                border: 2px solid black;
+            }
+            .custom-file-upload:hover {
+                background-color: rgb(254, 250, 250);
+            }
+            input[type="file"] {
+                display: none;
+            }
+            .text-editor {
+                position: relative;
+                width: 300px;
+                height: 100px;
+                background-color: rgb(245, 245, 7);
+                border: 2px dashed #ccc;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: grab;
+            }
+            #draggable-text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                cursor: move;
+                font-family: Arial, sans-serif;
+                font-size: 24px;
+                color: #333;
+                overflow: auto;
+                min-width: 50px;
+                min-height: 50px;
+                background-color: transparent;
+                z-index: 10;
+            }
+            .polera-container {
+                position: relative;
+                width: 500px;
+            }
+            #polera-imagen {
+                display: block;
+                width: 100%;
+            }
+            .botondedescarga {
+               padding: 15px;
+               margin: 5px;
+               background-color: rgb(245, 245, 7);
+               border-radius: 10px;
+               border: 2px solid black;
+            }
+            .com{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+            }
+            .in{
+                padding: 15px;
+                background-color: rgb(245, 245, 7);
+                border: 2px solid black;
+                border-radius: 10px;
+                
+            }
+            .il {
+                padding: 10px;
+                background-color: rgb(245, 245, 7);
+                border: 2px solid black;
+                border-radius: 10px;
+            }
+            .black-polera {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 300px;
+                height: 500px;
+                transform: translate(-50%, -50%);
+                z-index: 20;
+            }
+
+            #tshirt-div-back {
+               width: 580px;
+                height: 548px;
+                position: relative;
+                background-color: white;
+            }
+            .ini {
+                width: 180px;
+                height: 50px;
+                background-color: rgb(245, 245, 7);
+                border: 2px solid black;
+                border-radius: 10px;
+            }
+           
+            /* === BLOQUES DE LA BARRA LATERAL CON BORDE NEGRO === */
+.sidebar ul li {
+  border: 2px solid #000;          /* borde negro */
+  border-radius: 10px;             /* bordes redondeados */
+  margin: 10px 0;                  /* separación entre secciones */
+  padding: 10px;
+  background-color: rgb(236, 155, 4);       /* fondo claro */
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.sidebar ul li:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transform: scale(1.02);
+}
+
+/* Bordes para las imágenes de la galería */
+.mosaic img {
+  border: 2px solid #000;          /* borde negro */
+  transition: transform 0.2s;
+}
+.mosaic img:hover {
+  transform: scale(1.05);
+}
+
+/* Botón de menú visible solo en celular */
+.menu-btn {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background: #ffdd00;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-size: 20px;
+}
+
+/* Mostrar el botón en móviles */
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 240px;
+        height: 100vh;
+        transition: left 0.3s;
+        z-index: 9000;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+}
+
+
+
+        </style>
+    </head>
+    <body>
+      <button class="menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="fas fa-bars"></i>
+</button>
+
+        <!-- Encabezado -->
+        <header>
+            <h1>Personaliza y Crea tu Propio Diseño</h1>
+            <p>Plasma Tu Creatividad En Tu Propio Diseño</p>
+        </header>
+
+        
+<button class="in" id="deleteSelected" style="margin-top:10px;">
+    <i class="fas fa-trash"></i> Eliminar
+</button>
+
+<button class="in" id="undoDelete" style="margin-top:10px;">
+    <i class="fas fa-undo"></i> Restaurar
+</button>
+
+
+        <!-- Contenedor de Contenido -->
+        <div class="container">
+            <!-- Barra lateral de navegacion -->
+            <div class="sidebar">
+                <ul>
+                    <li>
+                        <a class="toggle-submenu"
+                        ><i class="fas fa-tshirt"></i>POLERAS
+                        <i class="fas fa-chevron-down" style="margin-left: auto"></i
+                      ></a>
+                    <div class="submenu">
+                      <div class="mosaic">
+                        <img class="polera-img" src="poleras/pngwing.com (1).png" alt="Polera blanca"/>
+                        <img class="polera-img" src="poleras/pngwing.com (2).png" alt="Polera blanca" />
+                        <img class="polera-img" src="poleras/pngwing.com (5).png" alt="Polera blanca" />
+                        <img class="polera-img" src="poleras/pngwing.com (7).png" alt="Polera blanca" />
+                        <img class="polera-img" src="poleras/pngwing.com (8).png" alt="Polera blanca" />
+                        <img class="polera-img" src="poleras/pngwing.com.png" alt="Polera blanca" />
+                      </div>
+                    </div>
+                </li>
+                    <li>
+                        <a class="toggle-submenu"
+                        ><i class="fas fa-image"></i>GALERIA
+                        <i class="fas fa-chevron-down" style="margin-left: auto"></i
+                      ></a>
+                    <div class="submenu">
+                      <div class="mosaic">
+                        <img class="mosaic-img" src="graficos/pngwing.com (1).png" alt="img1"/>
+                        <img class="mosaic-img" src="graficos/pngwing.com (2).png" alt="img2" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (3).png" alt="img3" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (4).png" alt="img4" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (5).png" alt="img5" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (6).png" alt="img6" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (7).png" alt="img1" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (22).png" alt="img4" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (9).png" alt="img3" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (10).png" alt="img4" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (11).png" alt="img5" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (12).png" alt="img6" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (13).png" alt="img1" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (14).png" alt="img2" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (15).png" alt="img3" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (16).png" alt="img4" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (17).png" alt="img5" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (18).png" alt="img6" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (19).png" alt="img1" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (20).png" alt="img2" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (21).png" alt="img3" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (8).png" alt="img2" />
+                        <img class="mosaic-img" src="graficos/pngwing.com (23).png" alt="img4" />
+                      </div>
+                    </div>
+                </li>
+    
+                    <li>
+                        <a href="#" class="flex"><i class="fas fa-home"></i>
+                            COLORES
+                            <input type="color" id="colorPicker" value="#ffffff" style="margin-left: auto"/>
+                        </a>
+                    </li>
+                    
+                          <li >
+                            <input type="file" id="tshirt-custompicture" accept="image/*" style="display: none;" />ELIGE TU IMAGEN
+                                 <button id="abrir-archivos" class="custom-file-upload">
+                                  <i class="fas fa-upload"></i></button>
+                         </li>
+
+                    <li>
+    <div class="text-editor">
+        <label for="userText"><strong>Escribe tu texto:</strong></label>
+        <textarea id="userText" type="text"  maxlength="15" placeholder="Escribe aquí tu mensaje..." style="width: 90%; height: 80px; resize: none; font-family: Arial; font-size: 16px; padding: 5px;"></textarea>
+    </div>
+
+    <div class="text-editor-controls" style="margin-top:10px;">
+        <label for="fontSelect">Fuente:</label>
+        <select id="fontSelect" class="in">
+            <option value="Arial" selected>Arial</option>
+            <option value="Comic Sans MS">Comic Sans</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Impact">Impact</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Lobster">Lobster</option>
+            <option value="Pacifico">Pacifico</option>
+        </select>
+
+        <br><br>
+
+        <label for="textColor">Color:</label>
+        <input type="color" id="textColor" value="#000000" class="in">
+
+        <br><br>
+
+        <button class="ini" id="insert-btn">Insertar</button>
+    </div>
+</li>
+
+
+                    <li class="com">DESCARGAR
+                        <button class="botondedescarga" id="download" onclick="downloadImage()">
+                   <i class="fas fa-download"></i></button>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="main-content">
+
+                <div style="margin-bottom: 15px; text-align:center;">
+                  <button id="verFrontal" class="in">Ver Frontal</button>
+                  <button id="verTrasera" class="in">Ver Trasera</button>
+                </div>
+
+
+              <div id="tshirt-div">
+               
+                <img
+                  id="tshirt-backgroundpicture"
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                  src="poleras/pngwing.com.png"
+                />
+
+                <div id="drawingArea" class="drawing-area">
+                    <div class="canvas-container">
+                        <canvas id="tshirt-canvas" width="300" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+
+           <div id="tshirt-div-back" style="display:none;">
+  <img 
+    id="tshirt-backgroundpicture-back"
+    alt="logo"
+    width="100%"
+    height="100%"
+    src="poleras\pngwing.com trasera.png" 
+  />
+
+  <div id="drawingAreaBack" class="black-polera">
+    <div class="canvas-container">
+      <canvas id="tshirt-canvas-back" width="300" height="500"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+        <footer class="footer">
+          <p>&copy; 2025 Diseño & Creatividad | Jhoel & Weimar </p>
+        </footer>
+    </body>
+</html>
+
+<script>
+// === CANVAS PRINCIPALES ===
+let canvasFront = new fabric.Canvas("tshirt-canvas");
+let canvasBack = new fabric.Canvas("tshirt-canvas-back");
+let currentCanvas = canvasFront;
+let isFront = true;
+
+
+// === HISTORIAL DE OBJETOS ELIMINADOS ===
+let deletedObjects = [];
+
+// === ELIMINAR OBJETO SELECCIONADO ===
+document.getElementById("deleteSelected").addEventListener("click", function () {
+    const active = currentCanvas.getActiveObject();
+
+    if (active) {
+        deletedObjects.push(active);  // ⬅ Guardar en el historial
+        currentCanvas.remove(active);
+        currentCanvas.discardActiveObject();
+        currentCanvas.renderAll();
+    }
+});
+
+// === RESTAURAR ÚLTIMO OBJETO ELIMINADO (MULTINIVEL) ===
+document.getElementById("undoDelete").addEventListener("click", function () {
+    if (deletedObjects.length > 0) {
+
+        // Recuperar lo último eliminado
+        const restoredObject = deletedObjects.pop();
+
+        currentCanvas.add(restoredObject);
+        currentCanvas.setActiveObject(restoredObject);
+        currentCanvas.renderAll();
+    }
+});
+
+
+
+// === CAMBIO ENTRE FRONTAL Y TRASERA ===
+document.getElementById("verFrontal").addEventListener("click", function() {
+  document.getElementById("tshirt-div").style.display = "block";
+  document.getElementById("tshirt-div-back").style.display = "none";
+  currentCanvas = canvasFront;
+  isFront = true;
+});
+
+document.getElementById("verTrasera").addEventListener("click", function() {
+  document.getElementById("tshirt-div").style.display = "none";
+  document.getElementById("tshirt-div-back").style.display = "block";
+  currentCanvas = canvasBack;
+  isFront = false;
+});
+
+// === CAMBIO DE COLOR DE FONDO ===
+const colorPicker = document.getElementById("colorPicker");
+colorPicker.addEventListener("input", function() {
+  const color = colorPicker.value;
+  if (isFront) {
+    document.getElementById("tshirt-div").style.backgroundColor = color;
+  } else {
+    document.getElementById("tshirt-div-back").style.backgroundColor = color;
+  }
+});
+
+
+// -----------------------------
+// HANDLER UNIFICADO para subir imagen y (opcional) eliminar fondo
+// -----------------------------
+document.getElementById("tshirt-custompicture").addEventListener("change", async function (e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const wantsRemoveBg = confirm("¿Quieres eliminar el fondo y dejar solo la figura como logo?");
+  const reader = new FileReader();
+
+  reader.onload = async function (evt) {
+    let imageDataUrl = evt.target.result; // data:image/...
+    console.log("Imagen cargada (dataURL) — tamaño aproximado:", Math.round(imageDataUrl.length/1024), "KB");
+
+    // Función auxiliar para añadir la imagen al canvas
+    const addToCanvas = (url) => {
+      fabric.Image.fromURL(url, function (oImg) {
+        // Mantener proporción, ajustar tamaño máximo
+        const max = 200;
+        if (oImg.width && oImg.height) {
+          const scale = Math.min(max / oImg.width, max / oImg.height);
+          oImg.scale(scale);
+        } else {
+          oImg.scaleToWidth(max);
+        }
+
+        currentCanvas.centerObject(oImg);
+        currentCanvas.add(oImg);
+        currentCanvas.setActiveObject(oImg);
+        currentCanvas.renderAll();
+      }, { crossOrigin: 'anonymous' });
+    };
+
+    // Si el usuario quiere eliminar fondo, intentamos con la librería
+    if (wantsRemoveBg) {
+      try {
+        console.log("Intentando remover fondo con backgroundRemoval...");
+        // backgroundRemoval puede devolver Blob o dataURL según opciones
+        const result = await backgroundRemoval(imageDataUrl, { model: "u2net", output: "blob" });
+
+        // Si la librería devuelve un Blob lo convertimos a object URL
+        if (result instanceof Blob) {
+          const objectUrl = URL.createObjectURL(result);
+          addToCanvas(objectUrl);
+
+          // liberar memoria después de un tiempo (opcional)
+          setTimeout(() => { URL.revokeObjectURL(objectUrl); }, 10000);
+        } else if (typeof result === "string") {
+          // si devolvió dataURL directo
+          addToCanvas(result);
+        } else {
+          // fallback: puede ser File, Response, etc. intentamos crear blob
+          try {
+            const blob = await (result.blob ? result.blob() : Promise.resolve(result));
+            const objectUrl = URL.createObjectURL(blob);
+            addToCanvas(objectUrl);
+            setTimeout(() => { URL.revokeObjectURL(objectUrl); }, 10000);
+          } catch (innerErr) {
+            console.warn("Formato inesperado devuelto por backgroundRemoval:", result);
+            throw innerErr;
+          }
+        }
+
+        console.log("Remoción de fondo aplicada correctamente.");
+        return;
+      } catch (err) {
+        console.error("Error al intentar eliminar fondo:", err);
+        alert("No se pudo eliminar el fondo (ver consola). Se usará la imagen original.");
+        // continúa y carga la imagen original como fallback
+      }
+    }
+
+    // Si no quiere quitar fondo o hubo error: carga la imagen original
+    addToCanvas(imageDataUrl);
+  };
+
+  reader.onerror = function (err) {
+    console.error("FileReader error:", err);
+    alert("Error leyendo el archivo. Mira la consola.");
+  };
+
+  reader.readAsDataURL(file);
+});
+
+document.querySelectorAll('.mosaic-img').forEach(img => {
+  img.addEventListener('click', function() {
+    fabric.Image.fromURL(this.src, function(oImg) {
+      oImg.scaleToWidth(200);
+      oImg.scaleToHeight(200);
+      currentCanvas.centerObject(oImg);
+      currentCanvas.add(oImg);
+      currentCanvas.renderAll();
+    });
+  });
+});
+
+
+
+
+
+
+// === SUBIR IMAGEN PERSONALIZADA ===
+document.getElementById("abrir-archivos").addEventListener("click", function() {
+  document.getElementById("tshirt-custompicture").click();
+});
+
+
+
+// === INSERTAR TEXTO ===
+document.getElementById("insert-btn").addEventListener("click", function() {
+  const texto = document.getElementById("userText").value.trim();
+  if (texto === "") return;
+
+  const fuente = document.getElementById("fontSelect").value;
+  const color = document.getElementById("textColor").value;
+
+  const textObject = new fabric.Text(texto, {
+    left: 100,
+    top: 100,
+    fontFamily: fuente,
+    fill: color,
+    fontSize: 30,
+    selectable: true,
+    editable: false   // opcional, por seguridad
+});
+
+
+  currentCanvas.add(textObject);
+  currentCanvas.setActiveObject(textObject);
+  currentCanvas.renderAll();
+}); 
+
+
+
+// === LIMPIAR TEXTO ===
+document.getElementById("clear-btn").addEventListener("click", function() {
+  currentCanvas.getObjects().forEach(obj => {
+    if (obj.type === 'i-text' || obj.type === 'text') {
+      currentCanvas.remove(obj);
+    }
+  });
+  currentCanvas.renderAll();
+});
+
+
+function attachLivePreview(canvas) {
+    canvas.on('selection:created', updateControls);
+    canvas.on('selection:updated', updateControls);
+}
+
+attachLivePreview(canvasFront);
+attachLivePreview(canvasBack);
+
+function updateControls(e) {
+    let obj = e.selected[0];
+
+    if (obj && obj.type === "text") {
+        document.getElementById("fontSelect").value = obj.fontFamily;
+        document.getElementById("textColor").value = obj.fill;
+    }
+}
+
+document.getElementById("fontSelect").addEventListener("change", function () {
+    const active = currentCanvas.getActiveObject();
+    if (active && active.type === "text") {
+        active.fontFamily = this.value;
+        currentCanvas.renderAll();
+    }
+});
+
+document.getElementById("textColor").addEventListener("input", function () {
+    const active = currentCanvas.getActiveObject();
+
+    if (active && active.type === "text") {
+        active.set("fill", this.value);
+        currentCanvas.renderAll();
+    }
+});
+
+
+
+// === DESCARGAR DISEÑO ===
+function downloadImage() {
+  const node = isFront
+    ? document.querySelector("#tshirt-div .drawing-area")
+    : document.querySelector("#tshirt-div-back .black-polera");
+
+  domtoimage.toPng(node).then(function(dataUrl) {
+    const link = document.createElement("a");
+    link.download = isFront ? "polera-frontal.png" : "polera-trasera.png";
+    link.href = dataUrl;
+    link.click();
+  }).catch(function(error) {
+    console.error("Error al descargar:", error);
+  });
+}
+document.getElementById("download").addEventListener("click", downloadImage);
+
+// === TECLA SUPRIMIR PARA ELIMINAR ELEMENTO SELECCIONADO ===
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Delete" || e.keyCode === 46) {
+    const activeObject = currentCanvas.getActiveObject();
+    if (activeObject) {
+      currentCanvas.remove(activeObject);
+      currentCanvas.renderAll();
+    }
+  }
+});
+
+// === ABRIR Y CERRAR SUBMENÚS ===
+document.querySelectorAll(".toggle-submenu").forEach(item => {
+  item.addEventListener("click", () => {
+    const submenu = item.nextElementSibling;
+    submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+  });
+});
+
+// === CAMBIO DE POLERA (FRONTAL + TRASERA SINCRONIZADAS) ===
+document.querySelectorAll('.polera-img').forEach(img => {
+  img.addEventListener('click', function() {
+
+    // Imagen frontal seleccionada
+    const frontalSrc = this.src;
+
+    // Obtiene el nombre del archivo (sin carpeta)
+    const filename = frontalSrc.substring(frontalSrc.lastIndexOf('/') + 1);
+
+    // Obtiene el nombre sin extensión
+    const baseName = filename.substring(0, filename.lastIndexOf('.'));
+
+    // Obtiene la extensión (.png)
+    const extension = filename.substring(filename.lastIndexOf('.'));
+
+    // Construye automáticamente la ruta de la parte trasera
+    // Ej: "pngwing.com (1).png" → "pngwing.com (1) trasera.png"
+    const backSrc = frontalSrc.replace(filename, baseName + " trasera" + extension);
+
+    // Aplica la parte frontal
+    document.getElementById("tshirt-backgroundpicture").src = frontalSrc;
+
+    // Aplica la parte trasera
+    document.getElementById("tshirt-backgroundpicture-back").src = backSrc;
+
+    console.log("Frontal:", frontalSrc);
+    console.log("Trasera:", backSrc);
+  });
+});
+
+
+</script>
