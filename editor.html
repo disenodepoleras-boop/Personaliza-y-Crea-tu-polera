@@ -888,28 +888,6 @@ document.querySelectorAll('.polera-img').forEach(img => {
   });
 });
 
-/* --- Handler para añadir gráficos de la galería al canvas --- */
-document.querySelectorAll('.mosaic-img').forEach(img => {
-  img.addEventListener('click', function() {
-    const src = this.getAttribute('src') || this.src;
-    // Fabric.Image.fromURL con crossOrigin para evitar problemas de canvas contamined
-    fabric.Image.fromURL(src, function(oImg) {
-      // Ajuste más seguro del tamaño
-      const max = 200;
-      if (oImg.width && oImg.height) {
-        const scale = Math.min(max / oImg.width, max / oImg.height);
-        oImg.scale(scale);
-      } else {
-        oImg.scaleToWidth(max);
-      }
-      oImg.set({ crossOrigin: 'anonymous' });
-      currentCanvas.centerObject(oImg);
-      currentCanvas.add(oImg);
-      currentCanvas.setActiveObject(oImg);
-      currentCanvas.renderAll();
-    }, { crossOrigin: 'anonymous' });
-  });
-});
-</script>
+
 
 </script>
