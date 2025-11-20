@@ -854,6 +854,62 @@ document.querySelectorAll('.polera-img').forEach(img => {
     console.log("Trasera:", backSrc);
   });
 });
+/* --- Handler robusto para cambiar la polera frontal/trasera --- */
+document.querySelectorAll('.polera-img').forEach(img => {
+  img.addEventListener('click', function() {
+    // Usar getAttribute para evitar URL codificadas (%20)
+    const frontalSrc = this.getAttribute('src'); // ruta tal como está en el HTML (relativa)
+    if (!frontalSrc) {
+      console.warn('Imagen frontal no tiene src válido', this);
+      return;
+    }
 
+    const filename = frontalSrc.split('/').pop(); // "pngwing.com (1).png"
+    const lastDot = filename.lastIndexOf('.');
+    if (lastDot === -1) {
+      console.warn('Nombre de archivo sin extensión:', filename);
+      return;
+    }
+    const baseName = filename.substring(0, lastDot); // "pngwing.com (1)"
+    const extension = filename.substring(lastDot);    // ".png"
+    const backFilename = baseName + ' trasera' + extension; // "pngwing.com (1) trasera.png"
+    const backSrc = frontalSrc.replace(filename, backFilename);
+
+    // Asignar frontal y trasera (si existen los elementos en el DOM)
+    const elFront = document.getElementById('tshirt-backgroundpicture');
+    const elBack = document.getElementById('tshirt-backgroundpicture-back');
+
+    if (elFront) elFront.src = frontalSrc;
+    if (elBack) elBack.src = backSrc;
+
+    // Si manejas variables de estado
+    isFront = true;
+    currentCanvas = canvasFront;
+  });
+});
+
+/* --- Handler para añadir gráficos de la galería al canvas --- */
+document.querySelectorAll('.mosaic-img').forEach(img => {
+  img.addEventListener('click', function() {
+    const src = this.getAttribute('src') || this.src;
+    // Fabric.Image.fromURL con crossOrigin para evitar problemas de canvas contamined
+    fabric.Image.fromURL(src, function(oImg) {
+      // Ajuste más seguro del tamaño
+      const max = 200;
+      if (oImg.width && oImg.height) {
+        const scale = Math.min(max / oImg.width, max / oImg.height);
+        oImg.scale(scale);
+      } else {
+        oImg.scaleToWidth(max);
+      }
+      oImg.set({ crossOrigin: 'anonymous' });
+      currentCanvas.centerObject(oImg);
+      currentCanvas.add(oImg);
+      currentCanvas.setActiveObject(oImg);
+      currentCanvas.renderAll();
+    }, { crossOrigin: 'anonymous' });
+  });
+});
+</script>
 
 </script>
