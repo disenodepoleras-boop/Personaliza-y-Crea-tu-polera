@@ -159,22 +159,40 @@ header {
 <section>
     <h2 class="subtitulo">¿De qué trata?</h2>
     <p class="texto">
-        Esta plataforma digital fue creada para que estudiantes puedan diseñar y personalizar
-        sus propias poleras deportivas, utilizando herramientas interactivas que promueven
-        la creatividad e identidad visual de los equipos dentro de nuestra Unidad Educativa.
-    </p>
+        Este sitio web funciona como un editor de diseño interactivo , permitiendo a los usuarios personalizar poleras (camisetas) en tiempo real, tanto en su vista frontal como trasera. El propósito principal es ofrecer una plataforma para que los usuarios plasman su creatividad y creen sus propios diseños de vestimenta.
 
-    <h2 class="subtitulo">Situación problemática</h2>
-    <p class="texto">
-        No existen servicios accesibles dentro de la comunidad educativa que permitan diseñar
-        poleras personalizadas. Esto dificulta que los equipos deportivos refuercen su
-        identidad y logren que sus prendas representen sus gustos y estilo.
-    </p>
+El editor está organizado con una barra lateral (sidebar) que agrupa todas las herramientas de personalización, optimizando la experiencia del usuario.
 
-    <h2 class="subtitulo">Objetivo General</h2>
-    <p class="texto">
-        Desarrollar un programa gráfico web que permita personalizar poleras deportivas,
-        promoviendo la creatividad de los estudiantes de la Unidad Educativa Nueva Jerusalén.
+👕 Personalización de la Polera
+Selección de modelos: Los usuarios pueden elegir entre varios diseños de poleras preestablecidas (representadas en mosaicos de imágenes) para cambiar la base del producto.
+
+Vistas Frontal y Trasera: El sitio permite alternar entre la vista frontal y la vista trasera de la polera para aplicar diseños en ambos lados.
+
+Color de Fondo: Se incluye un selector de color que permite cambiar el color de fondo del área de la polera.
+        
+
+🎨 Elementos de Diseño
+La plataforma ofrece diversas herramientas para añadir elementos al lienzo de la polera:
+
+Galería de Imágenes: El editor incorpora una galería con un mosaico de gráficos predefinidos que los usuarios pueden seleccionar y agregar instantáneamente a su diseño.
+
+Subida de Archivos: Los usuarios tienen la opción de cargar sus propias imágenes personalizadas desde su dispositivo para utilizarlas en la polera.
+
+Herramienta de Texto: Existe un bloque dedicado a la edición de texto, donde el usuario puede escribir su mensaje y personalizar la fuente (Arial, Comic Sans, Times New Roman, etc.) y el color del texto antes de insertarlo en el diseño.
+
+Manipulación del Canvas: Una vez insertados, todos los elementos (texto e imágenes) son objetos de Fabric.js, lo que permite a los usuarios moverlos, escalar su tamaño y rotarlos dentro del área de dibujo.
+        
+
+🗑️ Funcionalidad de Edición y Descarga
+El sitio web cuenta con funcionalidades clave para gestionar el proceso de diseño:
+
+Edición de Objetos: Se incluye un botón para eliminar el objeto seleccionado en el lienzo.
+
+Historial de Eliminación: El editor mantiene un historial de objetos eliminados, permitiendo a los usuarios restaurar el último elemento borrado con la función de "Restaurar".
+
+Descarga final: La característica más importante es la función de descarga ( downloadImage), que permite al usuario guardar el diseño final como una imagen PNG (ya sea de la parte frontal o trasera) para su uso posterior.
+
+En resumen, el sitio es una herramienta completa y enfocada al usuario para la creación visual y la personalización de poleras mediante la combinación de gráficos, texto y la elección de distintos modelos y colores.
     </p>
 
 
@@ -200,3 +218,4 @@ header {
 
 </body>
 </html>
+
